@@ -2,7 +2,7 @@
 Avant de lancer le script davay.sh, configurer kubectl :  
 > aws eks update-kubeconfig --region \<region\> --name \<cluster\_name\>  
   
-Et initialiser terraform (à exécuter dans le dossier terraform) :  
+Et initialiser terraform (à exécuter dans le dossier terraform et terraform/alb) :  
 > terraform init  
 
   
