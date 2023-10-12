@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lefootcestrince-deployment
+  labels:
+    app: lefootcestrince
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: lefootcestrince
+  template:
+    metadata:
+      labels:
+        app: lefootcestrince
+    spec:
+      containers:
+      - name: lefootcestrince
+        image: public.ecr.aws/g7l4n5q7/lefootcestrince:v1
+        ports:
+        - containerPort: 80
