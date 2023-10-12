@@ -2,6 +2,10 @@
 Avant de lancer le script davay.sh, configurer kubectl :  
 > aws eks update-kubeconfig --region \<region\> --name \<cluster\_name\>  
   
+Et initialiser terraform (à exécuter dans le dossier terraform) :  
+> terraform init  
+
+  
 Lancer le fichier davay.sh pour déployer l'infrastructure  
 Lancer le fichier ostanovka.sh pour supprimer l'infrastructure  
   
