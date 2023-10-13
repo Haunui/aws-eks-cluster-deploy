@@ -45,12 +45,19 @@ resource "aws_eks_cluster" "cluster" {
   }
 }
 
+resource "time_sleep" "wait30" {
+  depends_on = [aws_eks_cluster.cluster]
+  create_duration = "30s"
+}
+
 resource "aws_eks_addon" "addon" {
+  depends_on = [time_sleep.wait30]
+
   for_each = toset(var.eks_cluster_addons)
 
   cluster_name = "${var.prefix}-cluster"
   addon_name = each.value
-  resolve_conflicts_on_update = "PRESERVE"
+  resolve_conflicts_on_update = "OVERWRITE"
 
   tags = {
     LeJ = "cestleS"

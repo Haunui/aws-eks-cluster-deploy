@@ -20,11 +20,10 @@ module "eks_cluster" {
   security_group_ids = module.base.security_group_ids
 }
 
-
 module "node_group" {
   source = "./node_group"
 
-  dep = module.eks_cluster.dep_output
+  dep = time_sleep.wait.triggers.dep
 
   prefix = local.prefix
   region = local.region
@@ -41,14 +40,15 @@ resource "null_resource" "deploy" {
   }
 }
 
-output "output-prefix" {
-  value = local.prefix
-}
+module "alb" {
+  source = "./alb"
 
-output "output-region" {
-  value = local.region
-}
+  dep = time_sleep.wait.triggers.dep
 
-output "output-subnets" {
-  value = join(",", [for subnet_id in module.base.subnet_ids : subnet_id])
+  prefix = local.prefix
+  region = local.region
+  vpc_id = module.base.vpc_id
+  subnet_ids = module.base.subnet_ids
+  security_group_ids = module.base.security_group_ids
+  nodegroup_resources = module.node_group.nodegroup_resources
 }

@@ -1,10 +1,15 @@
 # AWS-EKS-CLUSTER-DEPLOY
-Avant de lancer le script davay.sh, configurer kubectl :  
+Avant de lancer le script terraform, configurer kubectl :  
 > aws eks update-kubeconfig --region \<region\> --name \<cluster\_name\>  
   
-Lancer le fichier davay.sh pour déployer l'infrastructure  
-Lancer le fichier ostanovka.sh pour supprimer l'infrastructure  
-  
-!! Attention : Pour lancer le script de suppression, il faut que le script de déploiment ait été lancé au moins une fois !!  
+Configurer terraform :  
+> terraform init  
+
+Lancer les commandes terraform dans l'ordre suivant :  
+> terraform apply -target=module.base  
+> terraform apply -target=module.eks\_cluster  
+> terraform apply -target=module.node\_group  
+> terraform apply -target=null\_resource.deploy  
+> terraform apply -target=module.alb  
   
 Changer les informations de l'infra dans le fichier variables.tf  

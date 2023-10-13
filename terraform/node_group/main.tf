@@ -67,3 +67,7 @@ resource "aws_eks_node_group" "nodegroup" {
     LeJ = "cestleS"
   }
 }
+
+output "nodegroup_resources" {
+  value = aws_eks_node_group.nodegroup.resources
+}

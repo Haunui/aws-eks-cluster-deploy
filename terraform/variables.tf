@@ -1,5 +1,5 @@
 locals {
-  prefix = "lefootcestrince"
+  prefix = "iunuah-eks"
   region = "eu-west-1"
 
   subnets = {
@@ -16,64 +16,13 @@ locals {
     }
   }
 
-  security_groups = {
-    useraccess = {
-      ingress = {
-        ssh = {
-          from_port = 22
-          to_port = 22
-          protocol = "tcp"
-          cidr_blocks = ["0.0.0.0/0"]
-        }
-
-        http = {
-          from_port = 80
-          to_port = 80
-          protocol = "tcp"
-          cidr_blocks = ["0.0.0.0/0"]
-        }
-      }
-
-      egress = {
-        all = {
-          from_port = 0
-          to_port = 0
-          protocol = "-1"
-          cidr_blocks = ["0.0.0.0/0"]
-        }
-      }
-    }
-    cluster = {
-      ingress = {
-        all = {
-          from_port = 0
-          to_port = 0
-          protocol = "-1"
-          cidr_blocks = ["0.0.0.0/0"]
-        }
-        nodeport = {
-          from_port = 30080
-          to_port = 30080
-          protocol = "TCP"
-          cidr_blocks = ["0.0.0.0/0"]
-        }
-      }
-      egress = {
-        all = {
-          from_port = 0
-          to_port = 0
-          protocol = "-1"
-          cidr_blocks = ["0.0.0.0/0"]
-        }
-      }
-    }
-  }
+  security_groups = ["useraccess", "cluster"]
 
   iam_role = "EKS_Students"
 
   eks_cluster = {
     version = "1.27"
-    addons = ["coredns","kube-proxy","vpc-cni"]
+    addons = ["kube-proxy","vpc-cni"]
 
     scaling_config = {
       desired_size = 2

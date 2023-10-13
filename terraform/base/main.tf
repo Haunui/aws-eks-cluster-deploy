@@ -82,37 +82,82 @@ resource "aws_route_table_association" "rtba" {
 }
 
 resource "aws_security_group" "sg" {
-  for_each = var.security_groups
+  for_each = toset(var.security_groups)
 
 	vpc_id = aws_vpc.vpc.id
-
-  dynamic "ingress" {
-    for_each = each.value.ingress
-
-    content {
-      from_port = ingress.value.from_port
-      to_port	= ingress.value.to_port
-      protocol = ingress.value.protocol
-      cidr_blocks = ingress.value.cidr_blocks
-    }
-  }
-
-  dynamic "egress" {
-    for_each = each.value.egress
-
-    content {
-      from_port = egress.value.from_port
-      to_port	= egress.value.to_port
-      protocol = egress.value.protocol
-      cidr_blocks = egress.value.cidr_blocks
-    }
-  }
 
   tags = {
     Name = "${var.prefix}-sg-${each.key}"
     LeJ = "cestleS"
   }
 }
+
+###### SGR USERACCESS
+
+resource "aws_security_group_rule" "sgr-ingress-useraccess-ssh" {
+  type = "ingress"
+  from_port = 22
+  to_port = 22
+  protocol = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+
+  security_group_id = aws_security_group.sg["useraccess"].id
+}
+
+resource "aws_security_group_rule" "sgr-ingress-useraccess-http" {
+  type = "ingress"
+  from_port = 80
+  to_port = 80
+  protocol = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+
+  security_group_id = aws_security_group.sg["useraccess"].id
+}
+
+resource "aws_security_group_rule" "sgr-egress-useraccess-all" {
+  type = "egress"
+  from_port = 0
+  to_port = 0
+  protocol = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+
+  security_group_id = aws_security_group.sg["useraccess"].id
+}
+
+
+###### SGR CLUSTER
+
+resource "aws_security_group_rule" "sgr-ingress-cluster-http" {
+  type = "ingress"
+  from_port = 80
+  to_port = 80
+  protocol = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+
+  security_group_id = aws_security_group.sg["cluster"].id
+}
+
+resource "aws_security_group_rule" "sgr-ingress-cluster-nodeport" {
+  type = "ingress"
+  from_port = 30080
+  to_port = 30080
+  protocol = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+
+  security_group_id = aws_security_group.sg["cluster"].id
+}
+
+resource "aws_security_group_rule" "sgr-egress-cluster-all" {
+  type = "egress"
+  from_port = 0
+  to_port = 0
+  protocol = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+
+  security_group_id = aws_security_group.sg["cluster"].id
+}
+
+
 
 output "vpc_id" {
   value = aws_vpc.vpc.id
