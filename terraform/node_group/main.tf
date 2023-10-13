@@ -1,4 +1,3 @@
-variable "dep" {}
 variable "prefix" {}
 variable "region" {}
 variable "iam_role" {}

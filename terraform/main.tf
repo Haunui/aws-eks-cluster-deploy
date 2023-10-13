@@ -23,8 +23,6 @@ module "eks_cluster" {
 module "node_group" {
   source = "./node_group"
 
-  dep = time_sleep.wait.triggers.dep
-
   prefix = local.prefix
   region = local.region
   iam_role = local.iam_role
@@ -42,8 +40,6 @@ resource "null_resource" "deploy" {
 
 module "alb" {
   source = "./alb"
-
-  dep = time_sleep.wait.triggers.dep
 
   prefix = local.prefix
   region = local.region

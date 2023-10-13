@@ -1,5 +1,3 @@
-variable "dep" {}
-
 variable "prefix" {}
 variable "region" {}
 variable "vpc_id" {}
