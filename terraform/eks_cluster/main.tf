@@ -50,6 +50,16 @@ resource "time_sleep" "wait30" {
   create_duration = "30s"
 }
 
+resource "aws_security_group_rule" "sgr-ingress-cluster-30080" {
+  type = "ingress"
+  from_port = 30080
+  to_port = 30080
+  protocol = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+
+  security_group_id = aws_eks_cluster.cluster.vpc_config[0].cluster_security_group_id
+}
+
 resource "aws_eks_addon" "addon" {
   depends_on = [time_sleep.wait30]
 
